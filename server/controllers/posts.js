@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import PostMessage from "../models/postMessage.js";
 
 export const getPosts = async (req, res) => {
@@ -37,6 +37,41 @@ export const updatePost = async (req, res) => {
     const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, {
       new: true,
     });
+    res.status(201).json(updatedPost);
+  } catch (error) {
+    res.status(409).json({ message: error.message });
+  }
+};
+
+export const deletePost = async (req, res) => {
+  const { id: _id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(_id))
+    return res.status(404).send("No Post with that id");
+
+  try {
+    const deletedPost = await PostMessage.findByIdAndDelete(_id);
+    res.status(201).json(deletedPost);
+  } catch (error) {
+    res.status(409).json({ message: error.message });
+  }
+};
+
+export const likePost = async (req, res) => {
+  const { id: _id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(_id))
+    return res.status(404).send("No Post with that id");
+  //When you set {new: true}, it means that the method will return the new version of the document after the update is applied
+
+  try {
+    const post = await PostMessage.findById(_id);
+    //console.log(post);
+    const updatedPost = await PostMessage.findByIdAndUpdate(
+      _id,
+      { likeCount: post.likeCount + 1 },
+      { new: true }
+    );
+    //console.log(updatedPost);
     res.status(201).json(updatedPost);
   } catch (error) {
     res.status(409).json({ message: error.message });
