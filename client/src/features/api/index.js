@@ -47,3 +47,35 @@ export const updatePost = createAsyncThunk(
     }
   }
 );
+
+//Delete Action
+
+export const deletePost = createAsyncThunk(
+  "deletePost",
+  async (id, { rejectWithValue }) => {
+    console.log("From delete post async thunk", id);
+    try {
+      const { data } = await axios.delete(`${url}/${id}`);
+      console.log(data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+//Like Action
+
+export const likePost = createAsyncThunk(
+  "likePost",
+  async (id, { rejectWithValue }) => {
+    console.log("From like post async thunk", id);
+    try {
+      const { data } = await axios.patch(`${url}/${id}/likePost`);
+      console.log(data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);

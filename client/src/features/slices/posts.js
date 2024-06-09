@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchPosts, createPost, updatePost } from "../api/index.js";
+import {
+  fetchPosts,
+  createPost,
+  updatePost,
+  deletePost,
+  likePost,
+} from "../api/index.js";
 
 const initialState = { posts: [], loading: false };
 
@@ -42,7 +48,7 @@ export const postSlice = createSlice({
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.loading = false;
-        console.log(state, action.payload);
+        //console.log(state, action.payload);
         state.posts.push(action.payload);
       })
       .addCase(createPost.rejected, (state, action) => {
@@ -54,12 +60,42 @@ export const postSlice = createSlice({
       })
       .addCase(updatePost.fulfilled, (state, action) => {
         state.loading = false;
-        console.log(state, action.payload);
+        //console.log(state, action.payload);
         state.posts = state.posts.map((post) =>
           post._id === action.payload._id ? action.payload : post
         );
       })
       .addCase(updatePost.rejected, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload;
+      })
+
+      .addCase(deletePost.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.loading = false;
+        //console.log(state, action.payload);
+        state.posts = state.posts.filter(
+          (post) => post._id !== action.payload._id
+        );
+      })
+      .addCase(deletePost.rejected, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload;
+      })
+
+      .addCase(likePost.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(likePost.fulfilled, (state, action) => {
+        state.loading = false;
+        //console.log(state, action.payload);
+        state.posts = state.posts.map((post) =>
+          post._id === action.payload._id ? action.payload : post
+        );
+      })
+      .addCase(likePost.rejected, (state, action) => {
         state.loading = false;
         state.posts = action.payload;
       });

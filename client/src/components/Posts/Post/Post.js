@@ -11,8 +11,11 @@ import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import moment from "moment";
+import { useDispatch } from "react-redux";
+import { deletePost, likePost } from "../../../features/api/index.js";
 
 const Post = ({ post, setCurrentId }) => {
+  const dispatch = useDispatch();
   return (
     <Card
       sx={{
@@ -110,12 +113,20 @@ const Post = ({ post, setCurrentId }) => {
             justifyContent: "space-between",
           }}
         >
-          <Button size="small" color="primary" onClick={() => {}}>
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => dispatch(likePost(post._id))}
+          >
             <ThumbUpAltIcon fontSize="small"></ThumbUpAltIcon>
             Like
             {post.likeCount}
           </Button>
-          <Button size="small" color="primary" onClick={() => {}}>
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => dispatch(deletePost(post._id))}
+          >
             <DeleteIcon fontSize="small"></DeleteIcon>
             Delete
           </Button>

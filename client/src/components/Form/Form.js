@@ -30,7 +30,6 @@ const Form = ({ currentId, setCurrentId }) => {
         selectedFile: "",
       });
       setKey(Date.now()); // Reset the key to current timestamp this for selected file issue
-      setCurrentId(null);
     } else {
       dispatch(createPost(postData));
       setPostData({
@@ -41,10 +40,11 @@ const Form = ({ currentId, setCurrentId }) => {
         selectedFile: "",
       });
       setKey(Date.now()); // Reset the key to current timestamp
-      setCurrentId(null);
     }
+    setCurrentId(null); //for clearing the form once the form is submitted
   };
-  const clear = () =>
+  const clear = () => {
+    setCurrentId(null);
     setPostData({
       creator: "",
       title: "",
@@ -52,6 +52,7 @@ const Form = ({ currentId, setCurrentId }) => {
       tags: "",
       selectedFile: "",
     });
+  };
   const [postData, setPostData] = useState({
     creator: "",
     title: "",
@@ -66,7 +67,7 @@ const Form = ({ currentId, setCurrentId }) => {
           variant="h6"
           sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
         >
-          Creating a memory
+          {currentId ? "Editing" : "Creating"} a memory
         </Typography>
         <TextField
           name="creator"
