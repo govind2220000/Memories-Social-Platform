@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Container, AppBar, Typography, Grow, Grid } from "@mui/material";
+import {
+  Container,
+  AppBar,
+  Typography,
+  Grow,
+  Grid,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import memories from "./images/memories.png";
 import Posts from "./components/Posts/Posts.js";
 import Form from "./components/Form/Form.js";
@@ -7,6 +15,8 @@ import { useDispatch } from "react-redux";
 import { fetchPosts } from "./features/api/index.js";
 
 const App = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch();
   const [currentId, setCurrentId] = useState(null);
 
@@ -53,6 +63,7 @@ const App = () => {
             justifyContent="space-between"
             alignItems="stretch"
             spacing={3}
+            direction={isMobile ? "column-reverse" : "row"}
           >
             <Grid item xs={12} sm={7}>
               <Posts setCurrentId={setCurrentId}></Posts>
