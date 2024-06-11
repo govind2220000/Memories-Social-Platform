@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const url = "http://localhost:5000/posts";
+const url = "https://memories-social-platform.onrender.com/posts"; //"http://localhost:5000/posts";
 
 //readAction API
 export const fetchPosts = createAsyncThunk(
