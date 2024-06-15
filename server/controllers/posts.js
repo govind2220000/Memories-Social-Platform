@@ -13,7 +13,11 @@ export const getPosts = async (req, res) => {
 export const createPost = async (req, res) => {
   const post = req.body;
 
-  const newPost = new PostMessage(post);
+  const newPost = new PostMessage({
+    ...post,
+    creator: req.userId,
+    createdAt: new Date().toISOString(),
+  });
 
   //   https://www.restapitutorial.com/httpstatuscodes.html
 
@@ -59,6 +63,7 @@ export const deletePost = async (req, res) => {
 export const likePost = async (req, res) => {
   const { id: _id } = req.params;
 
+  if (!req.userId) return res.json({ message: "Unauthenticated" });
   if (!mongoose.Types.ObjectId.isValid(_id))
     return res.status(404).send("No Post with that id");
   //When you set {new: true}, it means that the method will return the new version of the document after the update is applied
@@ -66,11 +71,19 @@ export const likePost = async (req, res) => {
   try {
     const post = await PostMessage.findById(_id);
     //console.log(post);
-    const updatedPost = await PostMessage.findByIdAndUpdate(
-      _id,
-      { likeCount: post.likeCount + 1 },
-      { new: true }
-    );
+    const index = post.likes.filter((_id) => _id === String(req.userId));
+    //console.log(index);
+    if (index.length === 0) {
+      // console.log("uuu");
+      post.likes.push(req.userId);
+    } else {
+      // console.log("123");
+      // console.log(post.likes);
+      post.likes = post.likes.filter((_id) => _id !== String(req.userId)); //this line means we will keep all the userId except the current user id so that it will be disliked for this current user
+    }
+    const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, {
+      new: true,
+    });
     //console.log(updatedPost);
     res.status(201).json(updatedPost);
   } catch (error) {
