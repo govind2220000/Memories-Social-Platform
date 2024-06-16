@@ -29,7 +29,7 @@ export const signin = async (req, res) => {
     );
     return res.status(200).json({ result: existingUser, token });
   } catch (error) {
-    res.status(500).json({ message: "Something wrong" });
+    res.status(500).json({ message: error });
   }
 };
 export const signup = async (req, res) => {
@@ -58,6 +58,6 @@ export const signup = async (req, res) => {
     );
     return res.status(200).json({ result, token });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error });
   }
 };
