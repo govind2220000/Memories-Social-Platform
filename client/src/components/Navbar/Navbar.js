@@ -1,13 +1,17 @@
 import { AppBar, Avatar, Button, Toolbar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 import memories from "../../images/memories.png";
 import { useTheme } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
+import { useDispatch, useSelector } from "react-redux";
+import { signOutUser } from "../../features/slices/posts.js";
 
 const Navbar = () => {
   const theme = useTheme();
-  const user = null;
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.app.user[0]);
+  //console.log(user);
   return (
     <AppBar
       sx={{
@@ -30,7 +34,7 @@ const Navbar = () => {
       >
         <Typography
           component={Link}
-          to="/"
+          to={user && "/"}
           variant="h2"
           align="center"
           sx={{
@@ -57,12 +61,30 @@ const Navbar = () => {
         }}
       >
         {user ? (
-          <div>
-            <Avatar alt={user?.result.name} src={user?.result.imageUrl}>
-              {user?.result.name.charAt(0)}
+          <div className="test">
+            {/* {console.log(typeof user, 12)} */}
+            <Avatar
+              alt={user?.userName || user?.result?.name}
+              src={user?.image}
+              sx={{
+                margin: "auto",
+              }}
+            >
+              {user?.userName?.charAt(0) || user?.result?.name?.charAt(0)}
             </Avatar>
-            <Typography variant="h6">{user?.result.name}</Typography>
-            <Button variant="contained" color="secondary"></Button>
+            {/* user?.result?.name => this structure is followed for normal signin/signup */}
+            {/* user?.userName => this structure is being followed for googleSignIn/SignUp  */}
+            <Typography variant="h6">
+              {user?.userName || user?.result?.name}
+            </Typography>
+            <Button
+              onClick={() => dispatch(signOutUser())}
+              variant="contained"
+              color="secondary"
+              sx={{ display: "insetInline" }}
+            >
+              Sign Out
+            </Button>
           </div>
         ) : (
           <Button
@@ -75,7 +97,7 @@ const Navbar = () => {
             variant="contained"
             color="primary"
           >
-            Sign In
+            Sign In / Sign Up
           </Button>
         )}
       </Toolbar>
