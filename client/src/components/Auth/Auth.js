@@ -12,7 +12,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Input from "./Input.js";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode as jwt_decode } from "jwt-decode";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { googlesignInUser } from "../../features/slices/posts.js";
 import { useNavigate } from "react-router-dom";
 import { signInUser, signUpUser } from "../../features/api/index.js";
@@ -42,7 +42,7 @@ const Auth = () => {
       //setIsSignup(false);
       navigate("/");
     }
-  }, []);
+  }, [navigate, user]);
   const googleSuccess = async (response) => {
     console.log(response);
     const decoded = jwt_decode(response.credential);
