@@ -1,17 +1,27 @@
 import { AppBar, Avatar, Button, Toolbar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import memories from "../../images/memories.png";
 import { useTheme } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { signOutUser } from "../../features/slices/posts.js";
+import { jwtDecode } from "jwt-decode";
 
 const Navbar = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.app.user[0]);
   //console.log(user);
+  useEffect(() => {
+    const token = user?.token;
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      //console.log(decodedToken);
+      if (decodedToken.exp * 1000 < new Date().getTime())
+        dispatch(signOutUser());
+    }
+  });
   return (
     <AppBar
       sx={{
