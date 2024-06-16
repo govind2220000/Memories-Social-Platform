@@ -2,7 +2,17 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const url = "http://localhost:5000/posts"; //"http://localhost:5000/posts";
+const authUrl = "http://localhost:5000/users";
 
+//For passing jwt token on every request
+axios.interceptors.request.use((req) => {
+  if (localStorage.getItem("profile")) {
+    req.headers.Authorization = `Bearer ${
+      JSON.parse(localStorage.getItem("profile")).token
+    }`;
+  }
+  return req;
+});
 //readAction API
 export const fetchPosts = createAsyncThunk(
   "fetchPosts",
@@ -73,6 +83,40 @@ export const likePost = createAsyncThunk(
     try {
       const { data } = await axios.patch(`${url}/${id}/likePost`);
       console.log(data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+//Auth actions
+
+export const signInUser = createAsyncThunk(
+  "signInUser",
+  async ({ formData, navigate }, { rejectWithValue }) => {
+    console.log(formData, navigate);
+    try {
+      //login the user
+      //console.log(formData, navigate);
+      const { data } = await axios.post(`${authUrl}/signin`, formData);
+      console.log(data);
+      navigate("/");
+      return data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+export const signUpUser = createAsyncThunk(
+  "signUpUser",
+  async ({ formData, navigate }, { rejectWithValue }) => {
+    console.log(formData, navigate);
+    try {
+      //signUp the user
+      const { data } = await axios.post(`${authUrl}/signup`, formData);
+      console.log(data);
+      navigate("/");
       return data;
     } catch (error) {
       return rejectWithValue(error);
