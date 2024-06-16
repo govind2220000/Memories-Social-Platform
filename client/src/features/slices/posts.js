@@ -5,9 +5,11 @@ import {
   updatePost,
   deletePost,
   likePost,
+  signInUser,
+  signUpUser,
 } from "../api/index.js";
 
-const initialState = { posts: [], loading: false };
+const initialState = { posts: [], loading: false, user: [] };
 
 //readAction
 // export const fetchPosts = createAsyncThunk(
@@ -28,7 +30,23 @@ const initialState = { posts: [], loading: false };
 export const postSlice = createSlice({
   name: "postSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    googlesignInUser: (state, action) => {
+      console.log(action.payload);
+      const userDetails = action?.payload;
+      state.user[0] = userDetails;
+      console.log(state.user[0]);
+      localStorage.setItem("profile", JSON.stringify({ ...userDetails }));
+    },
+    alreadysignedInUser: (state) => {
+      const userDetails = JSON.parse(localStorage.getItem("profile"));
+      state.user[0] = userDetails;
+    },
+    signOutUser: (state) => {
+      localStorage.removeItem("profile");
+      state.user = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
 
@@ -98,6 +116,38 @@ export const postSlice = createSlice({
       .addCase(likePost.rejected, (state, action) => {
         state.loading = false;
         state.posts = action.payload;
+      })
+
+      .addCase(signInUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(signInUser.fulfilled, (state, action) => {
+        state.loading = false;
+        //console.log(state, action.payload);
+        const userDetails = action?.payload;
+        state.user[0] = userDetails;
+        console.log(state.user[0]);
+        localStorage.setItem("profile", JSON.stringify({ ...userDetails }));
+      })
+      .addCase(signInUser.rejected, (state, action) => {
+        state.loading = false;
+        state.user[0] = action.payload;
+      })
+
+      .addCase(signUpUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(signUpUser.fulfilled, (state, action) => {
+        state.loading = false;
+        console.log(state, action.payload);
+        const userDetails = action?.payload;
+        state.user[0] = userDetails;
+        console.log(state.user[0]);
+        localStorage.setItem("profile", JSON.stringify({ ...userDetails }));
+      })
+      .addCase(signUpUser.rejected, (state, action) => {
+        state.loading = false;
+        state.user[0] = action.payload;
       });
   },
 });
@@ -105,3 +155,5 @@ export const postSlice = createSlice({
 //export const { searchUser } = postSlice.actions;
 
 export default postSlice.reducer;
+export const { googlesignInUser, alreadysignedInUser, signOutUser } =
+  postSlice.actions;
