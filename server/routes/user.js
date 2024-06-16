@@ -6,4 +6,8 @@ const router = express.Router();
 router.post("/signin", signin);
 router.post("/signup", signup);
 
+router.get("/", (req, res) => {
+  res.send("Hello to User API");
+});
+
 export default router;
