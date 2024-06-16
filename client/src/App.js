@@ -3,7 +3,7 @@ import { Container } from "@mui/material";
 
 import Navbar from "./components/Navbar/Navbar.js";
 import Home from "./components/Home/Home.js";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Auth from "./components/Auth/Auth.js";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
