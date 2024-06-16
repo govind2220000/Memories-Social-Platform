@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ThumbUpAltOutlined from "@mui/icons-material/ThumbUpAltOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import moment from "moment";
@@ -16,6 +17,36 @@ import { deletePost, likePost } from "../../../features/api/index.js";
 
 const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("profile"));
+  console.log(post.likes);
+  const Likes = () => {
+    console.log(post.likes.length, user?.result?._id);
+    if (post.likes.length > 0) {
+      return post.likes.find(
+        (like) => like === (user?._id || user?.result?._id)
+      ) ? (
+        <>
+          <ThumbUpAltIcon fontSize="small" />
+          &nbsp;
+          {post.likes.length > 2
+            ? `You and ${post.likes.length - 1} others`
+            : `${post.likes.length} like${post.likes.length > 1 ? "s" : ""}`}
+        </>
+      ) : (
+        <>
+          <ThumbUpAltOutlined fontSize="small" />
+          &nbsp;{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
+        </>
+      );
+    }
+
+    return (
+      <>
+        <ThumbUpAltOutlined fontSize="small" />
+        &nbsp;Like
+      </>
+    );
+  };
   return (
     <Card
       sx={{
@@ -47,7 +78,7 @@ const Post = ({ post, setCurrentId }) => {
             color: "white",
           }}
         >
-          {post.creator}
+          {post.name}
         </Typography>
         <Typography
           variant="body2"
@@ -118,9 +149,7 @@ const Post = ({ post, setCurrentId }) => {
             color="primary"
             onClick={() => dispatch(likePost(post._id))}
           >
-            <ThumbUpAltIcon fontSize="small"></ThumbUpAltIcon>
-            &nbsp; Like &nbsp;
-            {post.likeCount}
+            <Likes />
           </Button>
           <Button
             size="small"

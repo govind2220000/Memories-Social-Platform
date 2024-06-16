@@ -11,6 +11,7 @@ const Form = ({ currentId, setCurrentId }) => {
   const post = useSelector((state) =>
     currentId ? state.app.posts.find((p) => p._id === currentId) : null
   );
+  const user = JSON.parse(localStorage.getItem("profile"));
   //console.log(post);
   useEffect(() => {
     if (post) setPostData(post);
@@ -20,7 +21,12 @@ const Form = ({ currentId, setCurrentId }) => {
     e.preventDefault();
     if (currentId) {
       console.log(currentId, postData);
-      dispatch(updatePost({ id: currentId, payload: postData }));
+      dispatch(
+        updatePost({
+          id: currentId,
+          payload: { ...postData, name: user?.userName || user?.result?.name },
+        })
+      );
 
       setPostData({
         creator: "",
@@ -31,7 +37,9 @@ const Form = ({ currentId, setCurrentId }) => {
       });
       setKey(Date.now()); // Reset the key to current timestamp this for selected file issue
     } else {
-      dispatch(createPost(postData));
+      dispatch(
+        createPost({ ...postData, name: user?.userName || user?.result?.name })
+      );
       setPostData({
         creator: "",
         title: "",
@@ -46,7 +54,6 @@ const Form = ({ currentId, setCurrentId }) => {
   const clear = () => {
     setCurrentId(null);
     setPostData({
-      creator: "",
       title: "",
       message: "",
       tags: "",
@@ -54,12 +61,19 @@ const Form = ({ currentId, setCurrentId }) => {
     });
   };
   const [postData, setPostData] = useState({
-    creator: "",
     title: "",
     message: "",
     tags: "",
     selectedFile: "",
   });
+
+  // if (!user) {
+  //   <Paper>
+  //     <Typography variant="h6" align="center">
+  //       Please sign in create your own memories and like other's memories
+  //     </Typography>
+  //   </Paper>;
+  // }
   return (
     <Paper sx={{ padding: "5px" }}>
       <form autoComplete="off" noValidate onSubmit={handleSubmit}>
@@ -69,17 +83,7 @@ const Form = ({ currentId, setCurrentId }) => {
         >
           {currentId ? "Editing" : "Creating"} a memory
         </Typography>
-        <TextField
-          name="creator"
-          variant="outlined"
-          label="Creator"
-          fullWidth
-          sx={{ margin: "5px 0px" }}
-          value={postData.creator}
-          onChange={(e) =>
-            setPostData({ ...postData, creator: e.target.value })
-          }
-        ></TextField>
+
         <TextField
           name="title"
           variant="outlined"
