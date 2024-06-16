@@ -18,9 +18,9 @@ import { deletePost, likePost } from "../../../features/api/index.js";
 const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("profile"));
-  console.log(post.likes);
+  //console.log(post, user);
   const Likes = () => {
-    console.log(post.likes.length, user?.result?._id);
+    //console.log(post.likes.length, user?.result?._id);
     if (post.likes.length > 0) {
       return post.likes.find(
         (like) => like === (user?._id || user?.result?._id)
@@ -93,22 +93,25 @@ const Post = ({ post, setCurrentId }) => {
         </Typography>
       </div>
       <div>
-        <Button
-          style={{ color: "white" }}
-          sx={{
-            position: "absolute",
-            top: "20px",
-            right: "20px",
-            color: "white",
-          }}
-          size="small"
-          onClick={() => {
-            setCurrentId(post._id);
-            console.log(post._id);
-          }}
-        >
-          <MoreHorizIcon fontSize="medium"></MoreHorizIcon>
-        </Button>
+        {(user?._id === post?.creator ||
+          user?.result?._id === post?.creator) && (
+          <Button
+            style={{ color: "white" }}
+            sx={{
+              position: "absolute",
+              top: "20px",
+              right: "20px",
+              color: "white",
+            }}
+            size="small"
+            onClick={() => {
+              setCurrentId(post._id);
+              console.log(post._id);
+            }}
+          >
+            <MoreHorizIcon fontSize="medium"></MoreHorizIcon>
+          </Button>
+        )}
       </div>
       <div>
         <Typography
@@ -151,14 +154,18 @@ const Post = ({ post, setCurrentId }) => {
           >
             <Likes />
           </Button>
-          <Button
-            size="small"
-            color="primary"
-            onClick={() => dispatch(deletePost(post._id))}
-          >
-            <DeleteIcon fontSize="small"></DeleteIcon>
-            Delete
-          </Button>
+          {/* {console.log(user, post)} */}
+          {(user?._id === post?.creator ||
+            user?.result?._id === post?.creator) && (
+            <Button
+              size="small"
+              color="primary"
+              onClick={() => dispatch(deletePost(post._id))}
+            >
+              <DeleteIcon fontSize="small"></DeleteIcon>
+              Delete
+            </Button>
+          )}
         </CardActions>
       </div>
     </Card>
