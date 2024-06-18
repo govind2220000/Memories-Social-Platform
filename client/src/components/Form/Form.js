@@ -75,8 +75,22 @@ const Form = ({ currentId, setCurrentId }) => {
   //   </Paper>;
   // }
   return (
-    <Paper sx={{ padding: "5px" }}>
-      <form autoComplete="off" noValidate onSubmit={handleSubmit}>
+    <Paper sx={{ padding: "2px" }}>
+      <form
+        autoComplete="off"
+        noValidate
+        onSubmit={handleSubmit}
+        sx={{
+          margin: {
+            xs: "auto", // Center the form on extra-small screens
+            sm: "2px", // Default margin on small screens and up
+          },
+          padding: {
+            xs: "5px", // Center the form on extra-small screens
+            sm: "2px", // Default margin on small screens and up
+          },
+        }}
+      >
         <Typography
           variant="h6"
           sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}

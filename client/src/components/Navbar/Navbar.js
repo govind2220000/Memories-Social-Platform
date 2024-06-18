@@ -29,9 +29,14 @@ const Navbar = () => {
         margin: "30px 0",
         display: "flex",
         flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
         padding: "10px 50px",
+        "@media (max-width:600px)": {
+          display: "flex",
+          flexDirection: "column", // Example of a smaller padding for mobile screens
+          // Add other mobile-specific styles here
+        },
       }}
       position="static"
       color="inherit"
@@ -49,6 +54,12 @@ const Navbar = () => {
           align="center"
           sx={{
             color: "rgba(0,183,255, 1)",
+            textDecoration: "none",
+            fontSize: {
+              xs: "2rem", // Smaller text size for extra-small screens
+              sm: "2.5rem", // Slightly larger text size for small screens
+              md: "3rem", // Default text size for medium screens and up
+            },
           }}
         >
           Memories
@@ -68,30 +79,63 @@ const Navbar = () => {
           display: "flex",
           justifyContent: "flex-end",
           width: "500px",
+          justifyContent: "center",
+          width: {
+            xs: "100%", // Full width on extra-small screens
+            sm: "500px", // Fixed width on small screens and up
+          },
+          whiteSpace: "nowrap", // Keeps the text in a single line
+          overflow: "hidden", // Prevents text from overflowing
+          textOverflow: "ellipsis",
         }}
       >
         {user ? (
-          <div className="test">
+          <div
+            className="test"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center", // Center horizontally
+              width: "100%", // Take full width to allow centering
+              margin: "15px",
+            }}
+          >
             {/* {console.log(typeof user, 12)} */}
             <Avatar
               alt={user?.userName || user?.result?.name}
               src={user?.image}
-              sx={{
-                margin: "auto",
-              }}
+              sx={{}}
             >
               {user?.userName?.charAt(0) || user?.result?.name?.charAt(0)}
             </Avatar>
             {/* user?.result?.name => this structure is followed for normal signin/signup */}
             {/* user?.userName => this structure is being followed for googleSignIn/SignUp  */}
-            <Typography variant="h6">
+            <Typography
+              variant="h6"
+              sx={{
+                margin: "5px",
+                fontSize: {
+                  xs: "0.9rem", // Smaller text size for extra-small screens
+                  sm: "1.5rem", // Slightly larger text size for small screens
+                  md: "2rem", // Default text size for medium screens and up
+                },
+              }}
+            >
               {user?.userName || user?.result?.name}
             </Typography>
             <Button
               onClick={() => dispatch(signOutUser())}
               variant="contained"
               color="secondary"
-              sx={{ display: "insetInline" }}
+              sx={{
+                display: "insetInline",
+                margin: "5px",
+
+                fontSize: {
+                  xs: "12px",
+                  md: "15px",
+                },
+              }}
             >
               Sign Out
             </Button>
