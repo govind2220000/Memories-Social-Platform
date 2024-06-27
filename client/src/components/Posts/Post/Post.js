@@ -65,7 +65,7 @@ const Post = ({ post, setCurrentId, currentId }) => {
       <CardMedia
         onClick={() => {
           //setCurrentId(post._id);
-          console.log(post._id);
+          //console.log(post._id);
           navigate(`/posts/${post._id}`);
         }}
         image={post.selectedFile}

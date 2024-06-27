@@ -1,6 +1,6 @@
 import React from "react";
 import Post from "./Post/Post.js";
-import { Grid, CircularProgress } from "@mui/material";
+import { Grid, CircularProgress, Paper } from "@mui/material";
 import { useSelector } from "react-redux";
 
 const Posts = ({ setCurrentId }) => {
@@ -8,11 +8,9 @@ const Posts = ({ setCurrentId }) => {
   const isLoading = useSelector((state) => state?.app?.loading);
   //console.log(posts[0]);
 
-  if (!posts.length && !isLoading) return "No posts";
+  if (!posts?.length && !isLoading) return "No posts";
 
-  return isLoading ? (
-    <CircularProgress></CircularProgress>
-  ) : (
+  return (
     <Grid
       container
       alignItems="stretch"

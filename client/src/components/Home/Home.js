@@ -1,13 +1,12 @@
 import {
   AppBar,
   Button,
+  CircularProgress,
   Container,
   Grid,
   Grow,
   Paper,
   TextField,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Posts from "../Posts/Posts.js";
@@ -20,9 +19,10 @@ import Paginate from "../Pagination.jsx";
 import ChipInput from "material-ui-chip-input";
 
 const Home = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
-  const isTablet = useMediaQuery(theme.breakpoints.down("sm"));
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  // const isTablet = useMediaQuery(theme.breakpoints.down("sm"));
+  const isLoading = useSelector((state) => state?.app?.loading);
   const navigate = useNavigate();
   const [currentId, setCurrentId] = useState(null);
   const [search, setSearch] = useState("");
@@ -32,7 +32,7 @@ const Home = () => {
   const page = query.get("page") || 1;
   const searchQuery = query.get("searchQuery");
   // const user = useSelector((state) => state.app.user[0]);
-  console.log(page);
+  //console.log(page);
   function useQuery() {
     return new URLSearchParams(useLocation().search);
   }
@@ -52,6 +52,7 @@ const Home = () => {
       );
 
       setSearch("");
+      setTags([]);
     } else {
       <Navigate to="/"></Navigate>;
     }
@@ -73,7 +74,25 @@ const Home = () => {
   //   dispatch(fetchPosts()); //for the very first time it will do the api call and will get all the post but after whenever we perform any action we are directly updating out store and hence our data layer gets updated everytime hence we dont have to pass any dependency in the array to make this callbback run again and again and it works as expected. We have put dispatch since we were receiving warning. But for ideal case we should pass dependencies to get the most updated data
   //   // dispatch(alreadysignedInUser()); //checks if the user was already logged in or not
   // }, [dispatch, currentId]);
-  console.log(page);
+  //console.log(page, isLoading);
+  // if (!isLoading) {
+  //   return (
+  //     <Paper
+  //       elevation={6}
+  //       sx={{
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //         padding: "20px",
+  //         borderRadius: "15px",
+  //         height: "39vh",
+  //       }}
+  //     >
+  //       <CircularProgress size="7em" />
+  //     </Paper>
+  //   );
+  // }
+
   return (
     <Grow in style={{ maxWidth: "100%", width: "100%" }} className="ABC">
       <Container style={{ marginTop: "20px" }}>

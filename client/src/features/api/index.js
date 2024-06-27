@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const url = "http://localhost:5000/posts"; //"http://localhost:5000/posts";
-const authUrl = "http://localhost:5000/users"; //http://localhost:5000/users";
+const url = "https://memories-social-platform.onrender.com/posts"; //"https://memories-social-platform.onrender.com/posts";
+const authUrl = "https://memories-social-platform.onrender.com/users"; //https://memories-social-platform.onrender.com/users";
 
 //For passing jwt token on every request
 axios.interceptors.request.use((req) => {
@@ -25,7 +25,7 @@ export const fetchPostsBySearch = createAsyncThunk(
           payload.tags
         }`
       );
-      console.log(data);
+      //console.log(data);
 
       //console.log("From fetch post async thunk", data);
       //const result = await response.json();
@@ -41,14 +41,32 @@ export const fetchPosts = createAsyncThunk(
     //console.log(page);
     try {
       const { data } = await axios.get(`${url}?page=${page}`);
-      console.log("From fetch post async thunk", {
-        data,
-      });
+      // console.log("From fetch post async thunk", {
+      //   data,
+      // });
       //const result = await response.json();
       return {
         data: data.data,
         currentPage: data.currentPage,
         numberOfPage: data.numberOfPage,
+      };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+export const fetchPostsById = createAsyncThunk(
+  "fetchPostsById",
+  async ({ id }, { rejectWithValue }) => {
+    //console.log(id);
+    try {
+      const { data } = await axios.get(`${url}/${id}`);
+      // console.log("From fetch post by Id async thunk", {
+      //   data,
+      // });
+      //const result = await response.json();
+      return {
+        data: data.data,
       };
     } catch (error) {
       return rejectWithValue(error);

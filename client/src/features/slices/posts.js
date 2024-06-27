@@ -8,9 +8,10 @@ import {
   signInUser,
   signUpUser,
   fetchPostsBySearch,
+  fetchPostsById,
 } from "../api/index.js";
 
-const initialState = { posts: [], loading: false, user: [] };
+const initialState = { posts: [], post: [], loading: false, user: [] };
 
 //readAction
 // export const fetchPosts = createAsyncThunk(
@@ -63,11 +64,25 @@ export const postSlice = createSlice({
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.loading = false;
-        state.posts = action.payload;
+        state.post = action.payload;
       })
+      .addCase(fetchPostsById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchPostsById.fulfilled, (state, action) => {
+        state.loading = false;
+        //console.log(state.posts);
+        state.post = action.payload;
+      })
+      .addCase(fetchPostsById.rejected, (state, action) => {
+        state.loading = false;
+        state.post = action.payload;
+      })
+
       .addCase(fetchPostsBySearch.pending, (state) => {
         state.loading = true;
       })
+
       .addCase(fetchPostsBySearch.fulfilled, (state, action) => {
         state.loading = false;
         state.posts = action.payload;
