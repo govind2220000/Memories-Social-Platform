@@ -1,5 +1,5 @@
 import { AppBar, Avatar, Button, Toolbar, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import memories from "../../images/memories.png";
 import { useTheme } from "@mui/material";
@@ -12,6 +12,7 @@ import { fetchPosts } from "../../features/api/index.js";
 const Navbar = ({ setUser, user }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const page = 1;
   //const user = useSelector((state) => state.app.user[0]);
@@ -140,6 +141,7 @@ const Navbar = ({ setUser, user }) => {
               onClick={() => {
                 dispatch(signOutUser());
                 setUser(localStorage.removeItem("profile"));
+                navigate("/");
               }}
               variant="contained"
               color="secondary"
