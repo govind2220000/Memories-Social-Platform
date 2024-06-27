@@ -7,6 +7,7 @@ import {
   likePost,
   signInUser,
   signUpUser,
+  fetchPostsBySearch,
 } from "../api/index.js";
 
 const initialState = { posts: [], loading: false, user: [] };
@@ -32,10 +33,10 @@ export const postSlice = createSlice({
   initialState,
   reducers: {
     googlesignInUser: (state, action) => {
-      console.log(action.payload);
+      //console.log(action.payload);
       const userDetails = action?.payload;
       state.user[0] = userDetails;
-      console.log(state.user[0]);
+      //console.log(state.user[0]);
       localStorage.setItem("profile", JSON.stringify({ ...userDetails }));
     },
     alreadysignedInUser: (state) => {
@@ -44,6 +45,9 @@ export const postSlice = createSlice({
     },
     signOutUser: (state) => {
       localStorage.removeItem("profile");
+
+      state.posts = [];
+      state.loading = false;
       state.user = [];
     },
   },
@@ -61,13 +65,24 @@ export const postSlice = createSlice({
         state.loading = false;
         state.posts = action.payload;
       })
+      .addCase(fetchPostsBySearch.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchPostsBySearch.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload;
+      })
+      .addCase(fetchPostsBySearch.rejected, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload;
+      })
       .addCase(createPost.pending, (state) => {
         state.loading = true;
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.loading = false;
         //console.log(state, action.payload);
-        state.posts.push(action.payload);
+        state.posts.data.push(action.payload);
       })
       .addCase(createPost.rejected, (state, action) => {
         state.loading = false;
@@ -79,7 +94,7 @@ export const postSlice = createSlice({
       .addCase(updatePost.fulfilled, (state, action) => {
         state.loading = false;
         //console.log(state, action.payload);
-        state.posts = state.posts.map((post) =>
+        state.posts.data = state.posts.data.map((post) =>
           post._id === action.payload._id ? action.payload : post
         );
       })
@@ -94,7 +109,7 @@ export const postSlice = createSlice({
       .addCase(deletePost.fulfilled, (state, action) => {
         state.loading = false;
         //console.log(state, action.payload);
-        state.posts = state.posts.filter(
+        state.posts.data = state.posts.data.filter(
           (post) => post._id !== action.payload._id
         );
       })
@@ -109,7 +124,7 @@ export const postSlice = createSlice({
       .addCase(likePost.fulfilled, (state, action) => {
         state.loading = false;
         //console.log(state, action.payload);
-        state.posts = state.posts.map((post) =>
+        state.posts.data = state.posts.data.map((post) =>
           post._id === action.payload._id ? action.payload : post
         );
       })
@@ -143,7 +158,6 @@ export const postSlice = createSlice({
         const userDetails = action?.payload;
         state.user[0] = userDetails;
         console.log(state.user[0]);
-        localStorage.setItem("profile", JSON.stringify({ ...userDetails }));
       })
       .addCase(signUpUser.rejected, (state, action) => {
         state.loading = false;

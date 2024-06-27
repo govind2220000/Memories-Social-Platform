@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const url = "https://memories-social-platform.onrender.com/posts"; //"http://localhost:5000/posts";
-const authUrl = "https://memories-social-platform.onrender.com/users"; //http://localhost:5000/users";
+const url = "http://localhost:5000/posts"; //"http://localhost:5000/posts";
+const authUrl = "http://localhost:5000/users"; //http://localhost:5000/users";
 
 //For passing jwt token on every request
 axios.interceptors.request.use((req) => {
@@ -14,14 +14,42 @@ axios.interceptors.request.use((req) => {
   return req;
 });
 //readAction API
-export const fetchPosts = createAsyncThunk(
-  "fetchPosts",
-  async (args, { rejectWithValue }) => {
+export const fetchPostsBySearch = createAsyncThunk(
+  "fetchPostsBySearch",
+  async (payload, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(url);
+      const {
+        data: { data },
+      } = await axios.post(
+        `${url}/search?searchQuery=${payload.search || "none"}&tags=${
+          payload.tags
+        }`
+      );
+      console.log(data);
+
       //console.log("From fetch post async thunk", data);
       //const result = await response.json();
-      return data;
+      return { data };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+export const fetchPosts = createAsyncThunk(
+  "fetchPosts",
+  async ({ page }, { rejectWithValue }) => {
+    //console.log(page);
+    try {
+      const { data } = await axios.get(`${url}?page=${page}`);
+      console.log("From fetch post async thunk", {
+        data,
+      });
+      //const result = await response.json();
+      return {
+        data: data.data,
+        currentPage: data.currentPage,
+        numberOfPage: data.numberOfPage,
+      };
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -94,13 +122,16 @@ export const likePost = createAsyncThunk(
 
 export const signInUser = createAsyncThunk(
   "signInUser",
-  async ({ formData, navigate }, { rejectWithValue }) => {
+  async ({ formData, navigate, setUser }, { rejectWithValue }) => {
     console.log(formData, navigate);
     try {
       //login the user
       //console.log(formData, navigate);
       const { data } = await axios.post(`${authUrl}/signin`, formData);
       console.log(data);
+
+      localStorage.setItem("profile", JSON.stringify({ ...data }));
+      setUser(JSON.parse(localStorage.getItem("profile")));
       navigate("/");
       return data;
     } catch (error) {
@@ -110,12 +141,16 @@ export const signInUser = createAsyncThunk(
 );
 export const signUpUser = createAsyncThunk(
   "signUpUser",
-  async ({ formData, navigate }, { rejectWithValue }) => {
+  async ({ formData, navigate, setUser }, { rejectWithValue }) => {
     console.log(formData, navigate);
     try {
       //signUp the user
       const { data } = await axios.post(`${authUrl}/signup`, formData);
       console.log(data);
+
+      localStorage.setItem("profile", JSON.stringify({ ...data }));
+      setUser(JSON.parse(localStorage.getItem("profile")));
+
       navigate("/");
       return data;
     } catch (error) {

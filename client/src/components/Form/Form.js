@@ -3,13 +3,14 @@ import { TextField, Paper, Typography, Button } from "@mui/material";
 import FileBase64 from "react-file-base64";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, updatePost } from "../../features/api/index.js";
+import ChipInput from "material-ui-chip-input";
 
 const Form = ({ currentId, setCurrentId }) => {
   // const posts = useSelector((state) => state.app.posts);
   // console.log(posts);
   const [key, setKey] = useState(Date.now());
   const post = useSelector((state) =>
-    currentId ? state.app.posts.find((p) => p._id === currentId) : null
+    currentId ? state.app.posts.data.find((p) => p._id === currentId) : null
   );
   const user = JSON.parse(localStorage.getItem("profile"));
   //console.log(post);
@@ -32,7 +33,7 @@ const Form = ({ currentId, setCurrentId }) => {
         creator: "",
         title: "",
         message: "",
-        tags: "",
+        tags: [],
         selectedFile: "",
       });
       setKey(Date.now()); // Reset the key to current timestamp this for selected file issue
@@ -44,7 +45,7 @@ const Form = ({ currentId, setCurrentId }) => {
         creator: "",
         title: "",
         message: "",
-        tags: "",
+        tags: [],
         selectedFile: "",
       });
       setKey(Date.now()); // Reset the key to current timestamp
@@ -63,7 +64,7 @@ const Form = ({ currentId, setCurrentId }) => {
   const [postData, setPostData] = useState({
     title: "",
     message: "",
-    tags: "",
+    tags: [],
     selectedFile: "",
   });
 
@@ -74,8 +75,20 @@ const Form = ({ currentId, setCurrentId }) => {
   //     </Typography>
   //   </Paper>;
   // }
+  const handleAddChip = (tag) => {
+    console.log(postData, tag);
+    console.log({ ...postData, tags: [...postData.tags, tag] }); //Every time a new tag is added it will add that new tag in tags array in postData
+    setPostData({ ...postData, tags: [...postData.tags, tag] });
+  };
+
+  const handleDeleteChip = (chipToDelete) => {
+    setPostData({
+      ...postData,
+      tags: postData.tags.filter((tag) => tag !== chipToDelete),
+    });
+  };
   return (
-    <Paper sx={{ padding: "2px" }}>
+    <Paper elevation={6} sx={{ padding: "8px" }}>
       <form
         autoComplete="off"
         noValidate
@@ -88,6 +101,7 @@ const Form = ({ currentId, setCurrentId }) => {
           padding: {
             xs: "5px", // Center the form on extra-small screens
             sm: "2px", // Default margin on small screens and up
+            md: "5px",
           },
         }}
       >
@@ -118,17 +132,17 @@ const Form = ({ currentId, setCurrentId }) => {
             setPostData({ ...postData, message: e.target.value })
           }
         ></TextField>
-        <TextField
-          name="tags"
-          variant="outlined"
-          label="Tags"
-          fullWidth
-          value={postData.tags}
-          sx={{ margin: "8px 0px" }}
-          onChange={(e) =>
-            setPostData({ ...postData, tags: e.target.value.split(",") })
-          }
-        ></TextField>
+        <div style={{ padding: "5px 0", width: "94%" }}>
+          <ChipInput
+            name="tags"
+            variant="outlined"
+            label="Tags"
+            fullWidth
+            value={postData.tags}
+            onAdd={(chip) => handleAddChip(chip)}
+            onDelete={(chip) => handleDeleteChip(chip)}
+          />
+        </div>
         <div>
           <FileBase64
             key={key} //here the key is used as we selected the file and after submitting also the same file was shown as selected to over come that we have used this key as an state variable which updates every time we create or edit post such that this FileBase64 compoennt refreshes

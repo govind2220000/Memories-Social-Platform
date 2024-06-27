@@ -14,14 +14,15 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { deletePost, likePost } from "../../../features/api/index.js";
+import { Navigate, useNavigate } from "react-router-dom";
 
-const Post = ({ post, setCurrentId }) => {
+const Post = ({ post, setCurrentId, currentId }) => {
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("profile"));
   //console.log(post, user);
   const Likes = () => {
     //console.log(post.likes.length, user?.result?._id);
-    if (post.likes.length > 0) {
+    if (post?.likes?.length > 0) {
       return post.likes.find(
         (like) => like === (user?._id || user?.result?._id)
       ) ? (
@@ -47,6 +48,7 @@ const Post = ({ post, setCurrentId }) => {
       </>
     );
   };
+  const navigate = useNavigate();
   return (
     <Card
       sx={{
@@ -56,9 +58,16 @@ const Post = ({ post, setCurrentId }) => {
         borderRadius: "15px",
         height: "100%",
         position: "relative",
+        margin: "0px 10px",
       }}
+      elevation={6}
     >
       <CardMedia
+        onClick={() => {
+          //setCurrentId(post._id);
+          console.log(post._id);
+          navigate(`/posts/${post._id}`);
+        }}
         image={post.selectedFile}
         title={post.title}
         sx={{
@@ -123,7 +132,7 @@ const Post = ({ post, setCurrentId }) => {
             margin: "20px",
           }}
         >
-          {post.tags.map((tag) => `#${tag} `)}
+          {post?.tags?.map((tag) => `#${tag} `)}
         </Typography>
         <Typography
           sx={{

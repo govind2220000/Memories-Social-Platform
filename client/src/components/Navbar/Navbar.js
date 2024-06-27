@@ -1,5 +1,5 @@
 import { AppBar, Avatar, Button, Toolbar, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import memories from "../../images/memories.png";
 import { useTheme } from "@mui/material";
@@ -7,11 +7,14 @@ import { deepPurple } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { signOutUser } from "../../features/slices/posts.js";
 import { jwtDecode } from "jwt-decode";
+import { fetchPosts } from "../../features/api/index.js";
 
-const Navbar = () => {
+const Navbar = ({ setUser, user }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.app.user[0]);
+  const navigate = useNavigate();
+  const page = 1;
+  //const user = useSelector((state) => state.app.user[0]);
   //console.log(user);
   useEffect(() => {
     const token = user?.token;
@@ -25,55 +28,62 @@ const Navbar = () => {
   return (
     <AppBar
       sx={{
-        borderRadius: 15,
-        margin: "30px 0",
+        borderRadius: 4,
+        margin: "2px 2px",
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
         padding: "10px 50px",
-        "@media (max-width:600px)": {
+        width: "100%",
+
+        "@media (max-width:1200px)": {
           display: "flex",
           flexDirection: "column", // Example of a smaller padding for mobile screens
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
           // Add other mobile-specific styles here
         },
       }}
       position="static"
       color="inherit"
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <Typography
-          component={Link}
-          to={user && "/"}
-          variant="h2"
-          align="center"
-          sx={{
-            color: "rgba(0,183,255, 1)",
-            textDecoration: "none",
-            fontSize: {
-              xs: "2rem", // Smaller text size for extra-small screens
-              sm: "2.5rem", // Slightly larger text size for small screens
-              md: "3rem", // Default text size for medium screens and up
-            },
+      <Link to="/" onClick={() => dispatch(fetchPosts({ page }))}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
           }}
         >
-          Memories
-        </Typography>
-        <img
-          src={memories}
-          alt="memories"
-          height="60"
-          width=""
-          sx={{
-            marginLeft: "15px",
-          }}
-        ></img>
-      </div>
+          <Typography
+            component={Link}
+            to={user && "/"}
+            variant="h2"
+            align="center"
+            sx={{
+              color: "rgba(0,183,255, 1)",
+              textDecoration: "none",
+              fontSize: {
+                xs: "2rem", // Smaller text size for extra-small screens
+                sm: "2.5rem", // Slightly larger text size for small screens
+                md: "3rem", // Default text size for medium screens and up
+              },
+            }}
+          >
+            Memories
+          </Typography>
+          <img
+            src={memories}
+            alt="memories"
+            height="60"
+            width=""
+            sx={{
+              marginLeft: "15px",
+            }}
+          ></img>
+        </div>{" "}
+      </Link>
       <Toolbar
         sx={{
           display: "flex",
@@ -113,7 +123,11 @@ const Navbar = () => {
             <Typography
               variant="h6"
               sx={{
-                margin: "5px",
+                margin: {
+                  xs: "2px",
+                  sm: "4px",
+                  lg: "6px",
+                },
                 fontSize: {
                   xs: "0.9rem", // Smaller text size for extra-small screens
                   sm: "1.5rem", // Slightly larger text size for small screens
@@ -124,7 +138,10 @@ const Navbar = () => {
               {user?.userName || user?.result?.name}
             </Typography>
             <Button
-              onClick={() => dispatch(signOutUser())}
+              onClick={() => {
+                dispatch(signOutUser());
+                setUser(localStorage.removeItem("profile"));
+              }}
               variant="contained"
               color="secondary"
               sx={{

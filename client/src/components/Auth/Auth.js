@@ -12,16 +12,17 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Input from "./Input.js";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode as jwt_decode } from "jwt-decode";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { googlesignInUser } from "../../features/slices/posts.js";
 import { useNavigate } from "react-router-dom";
 import { signInUser, signUpUser } from "../../features/api/index.js";
+import LoadingDialog from "../Loading.jsx";
 
-const Auth = () => {
+const Auth = ({ user, setUser }) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const dispatch = useDispatch();
-  const user = JSON.parse(localStorage.getItem("profile"));
+  const loading = useSelector((state) => state.app.loading);
   //console.log(user);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -42,7 +43,7 @@ const Auth = () => {
       //setIsSignup(false);
       navigate("/");
     }
-  }, [navigate, user]);
+  }, []);
   const googleSuccess = async (response) => {
     console.log(response);
     const decoded = jwt_decode(response.credential);
@@ -60,7 +61,7 @@ const Auth = () => {
 
     try {
       dispatch(googlesignInUser(user));
-      //setUser(JSON.parse(localStorage.getItem("profile")));
+      setUser(JSON.parse(localStorage.getItem("profile")));
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -75,9 +76,9 @@ const Auth = () => {
     e.preventDefault();
     if (!user) {
       if (isSignup) {
-        dispatch(signUpUser({ formData, navigate }));
+        dispatch(signUpUser({ formData, navigate, setUser }));
       } else {
-        dispatch(signInUser({ formData, navigate }));
+        dispatch(signInUser({ formData, navigate, setUser }));
       }
     }
 
@@ -93,6 +94,10 @@ const Auth = () => {
     setIsSignup((isSignup) => !isSignup);
     setShowPassword(false);
   };
+
+  if (loading) {
+    return <LoadingDialog></LoadingDialog>;
+  }
 
   return (
     <Container maxWidth="xs">
