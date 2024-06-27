@@ -43,7 +43,7 @@ const Auth = ({ user, setUser }) => {
       //setIsSignup(false);
       navigate("/");
     }
-  }, []);
+  }, [navigate, user]);
   const googleSuccess = async (response) => {
     console.log(response);
     const decoded = jwt_decode(response.credential);

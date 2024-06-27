@@ -134,17 +134,17 @@ export const postSlice = createSlice({
       })
 
       .addCase(likePost.pending, (state) => {
-        state.loading = true;
+        //state.loading = true;
       })
       .addCase(likePost.fulfilled, (state, action) => {
-        state.loading = false;
+        //state.loading = false;
         //console.log(state, action.payload);
         state.posts.data = state.posts.data.map((post) =>
           post._id === action.payload._id ? action.payload : post
         );
       })
       .addCase(likePost.rejected, (state, action) => {
-        state.loading = false;
+        //state.loading = false;
         state.posts = action.payload;
       })
 

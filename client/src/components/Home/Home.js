@@ -1,19 +1,18 @@
 import {
   AppBar,
   Button,
-  CircularProgress,
   Container,
   Grid,
   Grow,
   Paper,
   TextField,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Posts from "../Posts/Posts.js";
 import Form from "../Form/Form.js";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchPosts, fetchPostsBySearch } from "../../features/api/index.js";
-import { alreadysignedInUser } from "../../features/slices/posts.js";
+import { useDispatch } from "react-redux";
+import { fetchPostsBySearch } from "../../features/api/index.js";
+
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import Paginate from "../Pagination.jsx";
 import ChipInput from "material-ui-chip-input";
@@ -22,7 +21,7 @@ const Home = () => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
   // const isTablet = useMediaQuery(theme.breakpoints.down("sm"));
-  const isLoading = useSelector((state) => state?.app?.loading);
+
   const navigate = useNavigate();
   const [currentId, setCurrentId] = useState(null);
   const [search, setSearch] = useState("");
@@ -30,7 +29,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const query = useQuery();
   const page = query.get("page") || 1;
-  const searchQuery = query.get("searchQuery");
+
   // const user = useSelector((state) => state.app.user[0]);
   //console.log(page);
   function useQuery() {

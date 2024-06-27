@@ -1,10 +1,10 @@
 import { AppBar, Avatar, Button, Toolbar, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import React, { useEffect } from "react";
 import memories from "../../images/memories.png";
 import { useTheme } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { signOutUser } from "../../features/slices/posts.js";
 import { jwtDecode } from "jwt-decode";
 import { fetchPosts } from "../../features/api/index.js";
@@ -12,7 +12,7 @@ import { fetchPosts } from "../../features/api/index.js";
 const Navbar = ({ setUser, user }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const page = 1;
   //const user = useSelector((state) => state.app.user[0]);
   //console.log(user);
@@ -88,8 +88,7 @@ const Navbar = ({ setUser, user }) => {
         sx={{
           display: "flex",
           justifyContent: "flex-end",
-          width: "500px",
-          justifyContent: "center",
+
           width: {
             xs: "100%", // Full width on extra-small screens
             sm: "500px", // Fixed width on small screens and up

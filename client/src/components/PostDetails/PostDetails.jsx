@@ -1,7 +1,7 @@
 import { CircularProgress, Divider, Paper, Typography } from "@mui/material";
-import React, { useDebugValue, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   fetchPostsById,
   fetchPostsBySearch,
@@ -25,14 +25,14 @@ const PostDetails = () => {
 
   useEffect(() => {
     dispatch(fetchPostsById({ id }));
-  }, [id]);
+  }, [id, dispatch]);
 
   useEffect(() => {
     if (post)
       dispatch(
         fetchPostsBySearch({ search: "none", tags: post?.tags.join(",") })
       );
-  }, [post]);
+  }, [post, dispatch]);
 
   //console.log(posts);
   const recommendedPosts = posts?.filter((data) => data?._id !== post?._id);
@@ -118,7 +118,11 @@ const PostDetails = () => {
                   <Typography gutterBottom variant="subtitle1">
                     Likes: {likes.length}
                   </Typography>
-                  <img src={selectedFile} width="200px" />
+                  <img
+                    src={selectedFile}
+                    alt="https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png"
+                    width="200px"
+                  />
                 </div>
               )
             )}
