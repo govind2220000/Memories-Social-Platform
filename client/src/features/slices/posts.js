@@ -9,6 +9,7 @@ import {
   signUpUser,
   fetchPostsBySearch,
   fetchPostsById,
+  addComment,
 } from "../api/index.js";
 
 const initialState = { posts: [], post: [], loading: false, user: [] };
@@ -66,6 +67,20 @@ export const postSlice = createSlice({
         state.loading = false;
         state.post = action.payload;
       })
+
+      .addCase(addComment.pending, (state) => {
+        //state.loading = true;
+      })
+      .addCase(addComment.fulfilled, (state, action) => {
+        //state.loading = false;
+        //console.log(action.payload.data.comments);
+        state.post.data.comments = action.payload.data.comments;
+      })
+      .addCase(addComment.rejected, (state, action) => {
+        //state.loading = false;
+        state.post = action.payload;
+      })
+
       .addCase(fetchPostsById.pending, (state) => {
         state.loading = true;
       })
