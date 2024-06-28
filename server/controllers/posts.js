@@ -141,7 +141,7 @@ export const commentPost = async (req, res) => {
     });
     res.status(200).json(updatedPost);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     res.status(400).json({ message: error.message });
   }
 };
