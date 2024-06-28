@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import useStyles from "./PostDetailsStyles.js";
 import { Button, TextField, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
@@ -6,17 +6,24 @@ import { addComment } from "../../features/api/index.js";
 
 const CommentSection = ({ post }) => {
   const classes = useStyles();
+  const commentsRef = useRef();
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("profile"));
-  const [comments, setComments] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  //console.log(post.comments);
+  const [comments, setComments] = useState(post?.comments);
   const [comment, setComment] = useState("");
-  const handleClick = () => {
+
+  const handleClick = (e) => {
+    e.preventDefault();
     dispatch(
       addComment({
         commentDetails: `${user?.userName || user?.result?.name}:${comment}`,
         postId: post?._id,
       })
     );
+
+    setComment("");
+    commentsRef.current.scrollIntoView({ behavior: "smooth" });
   };
   return (
     <div className="">
@@ -32,16 +39,19 @@ const CommentSection = ({ post }) => {
               variant="subtitle1"
               sx={{
                 fontSize: {
-                  xs: "0.8rem", // Smaller text size for extra-small screens
-                  sm: "1rem", // Slightly larger text size for small screens
-                  md: "1.2rem", // Default text size for medium screens and up
+                  xs: "0.7rem", // Smaller text size for extra-small screens
+                  sm: "0.7rem", // Slightly larger text size for small screens
+                  md: "0.875rem", // Default text size for medium screens and up
+                  lg: "0.875rem",
                 },
                 display: "insetInline",
               }}
             >
-              Comment {i}
+              <strong>{`${comment.split(":")[0]}:`}</strong>
+              {comment.split(":")[1]}
             </Typography>
           ))}
+          <div ref={commentsRef} />
         </div>
         <div style={{ width: "70%" }}>
           <Typography gutterBottom variant="h6">

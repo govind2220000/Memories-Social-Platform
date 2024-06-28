@@ -6,6 +6,7 @@ import {
   fetchPostsById,
   fetchPostsBySearch,
 } from "../../features/api/index.js";
+import CommentSection from "./CommentSection.jsx";
 import useStyles from "./PostDetailsStyles.js";
 import moment from "moment";
 
@@ -73,13 +74,10 @@ const PostDetails = () => {
           <Typography variant="body1">
             {moment(post?.createdAt).fromNow()}
           </Typography>
-          {/* <Divider style={{ margin: "20px 0" }} /> */}
-          {/* <Typography variant="body1">
-            <strong>Realtime Chat - coming soon!</strong>
-          </Typography>
-          <Divider style={{ margin: "20px 0" }} /> */}
-          {/* <CommentSection post={post} /> */}
-          {/* <Divider style={{ margin: "20px 0" }} /> */}
+
+          <Divider style={{ margin: "20px 0" }} />
+          <CommentSection post={post} />
+          <Divider style={{ margin: "20px 0" }} />
         </div>
         <div className={classes.imageSection}>
           <img
