@@ -37,17 +37,17 @@ const Auth = ({ user, setUser }) => {
   const [showPassword, setShowPassword] = useState(false);
   //const googleSuccess = async (response) => console.log(response);
   useEffect(() => {
-    console.log("inuseEffext");
+    //console.log("inuseEffext");
     if (user) {
-      console.log("inuseEffext if block");
+      //console.log("inuseEffext if block");
       //setIsSignup(false);
       navigate("/");
     }
   }, [navigate, user]);
   const googleSuccess = async (response) => {
-    console.log(response);
+    //console.log(response);
     const decoded = jwt_decode(response.credential);
-    console.log(decoded);
+    //console.log(decoded);
     const { name, picture, sub, email } = decoded;
 
     const user = {

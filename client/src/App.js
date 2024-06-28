@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "@mui/material";
 
 import Navbar from "./components/Navbar/Navbar.js";
@@ -10,6 +10,27 @@ import PostDetails from "./components/PostDetails/PostDetails.jsx";
 
 const App = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+
+  /**
+   * useEffect hook to listen for changes in localStorage and update user profile accordingly.
+   */
+  useEffect(() => {
+    /**
+     * Function to handle changes in localStorage and update user profile.
+     */
+    const handleStorageChange = () => {
+      setUser(JSON.parse(localStorage.getItem("profile")));
+    };
+
+    // Add event listener for storage changes
+    window.addEventListener("storage", handleStorageChange);
+
+    // Clean up by removing event listener when component unmounts
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <BrowserRouter>
@@ -27,7 +48,12 @@ const App = () => {
               exact
               element={user ? <Home /> : <Navigate to="/auth"></Navigate>}
             />
-            <Route path="/posts/:id" element={<PostDetails />} />
+            <Route
+              path="/posts/:id"
+              element={
+                user ? <PostDetails /> : <Navigate to="/auth"></Navigate>
+              }
+            />
             <Route
               path="/auth"
               element={
