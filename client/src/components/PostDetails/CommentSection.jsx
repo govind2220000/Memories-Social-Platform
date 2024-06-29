@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import useStyles from "./PostDetailsStyles.js";
 import { Button, TextField, Typography } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addComment } from "../../features/api/index.js";
 
 const CommentSection = ({ post }) => {
@@ -9,8 +9,9 @@ const CommentSection = ({ post }) => {
   const commentsRef = useRef();
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("profile"));
+
   //console.log(post.comments);
-  const [comments, setComments] = useState(post?.comments);
+  const comments = useSelector((state) => state?.app?.comments);
   const [comment, setComment] = useState("");
 
   const handleClick = (e) => {

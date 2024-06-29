@@ -12,7 +12,13 @@ import {
   addComment,
 } from "../api/index.js";
 
-const initialState = { posts: [], post: [], loading: false, user: [] };
+const initialState = {
+  posts: [],
+  post: [],
+  loading: false,
+  user: [],
+  comments: [],
+};
 
 //readAction
 // export const fetchPosts = createAsyncThunk(
@@ -74,7 +80,7 @@ export const postSlice = createSlice({
       .addCase(addComment.fulfilled, (state, action) => {
         //state.loading = false;
         //console.log(action.payload.data.comments);
-        state.post.data.comments = action.payload.data.comments;
+        state.comments = action.payload.data.comments;
       })
       .addCase(addComment.rejected, (state, action) => {
         //state.loading = false;
@@ -86,6 +92,7 @@ export const postSlice = createSlice({
       })
       .addCase(fetchPostsById.fulfilled, (state, action) => {
         state.loading = false;
+        state.comments = action.payload.data.comments;
         //console.log(state.posts);
         state.post = action.payload;
       })

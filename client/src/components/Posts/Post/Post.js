@@ -75,6 +75,9 @@ const Post = ({ post, setCurrentId, currentId }) => {
           paddingTop: "56.25%",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
           backgroundBlendMode: "darken",
+          "&:hover": {
+            cursor: "pointer",
+          },
         }}
       />
       <div>
@@ -146,7 +149,9 @@ const Post = ({ post, setCurrentId, currentId }) => {
         </Typography>
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
-            {post.message}
+            {post.message.length > 100
+              ? `${post.message.substring(0, 100)}...`
+              : post.message}
           </Typography>
         </CardContent>
         <CardActions
