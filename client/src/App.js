@@ -35,7 +35,11 @@ const App = () => {
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <BrowserRouter>
         <Container maxWidth="2000px" className="h1">
-          <Navbar setUser={setUser} user={user}></Navbar>
+          {user ? (
+            <Navbar setUser={setUser} user={user}></Navbar>
+          ) : (
+            <Navigate to="/auth"></Navigate>
+          )}
           <Routes>
             {/* {console.log(user)} */}
             <Route path="/" element={<Navigate to="/posts"></Navigate>} />

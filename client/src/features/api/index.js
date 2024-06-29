@@ -125,10 +125,10 @@ export const deletePost = createAsyncThunk(
 export const likePost = createAsyncThunk(
   "likePost",
   async (id, { rejectWithValue }) => {
-    console.log("From like post async thunk", id);
+    //console.log("From like post async thunk", id);
     try {
       const { data } = await axios.patch(`${url}/${id}/likePost`);
-      console.log(data);
+      //console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue(error);

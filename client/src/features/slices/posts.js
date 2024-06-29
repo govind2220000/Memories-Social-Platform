@@ -119,7 +119,7 @@ export const postSlice = createSlice({
       .addCase(createPost.fulfilled, (state, action) => {
         state.loading = false;
         //console.log(state, action.payload);
-        state.posts.data.push(action.payload);
+        state.posts.data.unshift(action.payload);
       })
       .addCase(createPost.rejected, (state, action) => {
         state.loading = false;

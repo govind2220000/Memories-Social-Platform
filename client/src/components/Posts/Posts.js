@@ -7,7 +7,7 @@ const Posts = ({ setCurrentId }) => {
   const posts = useSelector((state) => state?.app?.posts?.data);
   const isLoading = useSelector((state) => state?.app?.loading);
   //console.log(posts[0]);
-
+  const currentPosts = posts?.slice(0, 8);
   if (!posts?.length && !isLoading) return "No posts";
 
   return isLoading ? (
@@ -20,7 +20,7 @@ const Posts = ({ setCurrentId }) => {
       className="AAAAA"
       sx={{ width: "fullWidth", marginLeft: { sm: "auto" } }}
     >
-      {posts?.map((post) => (
+      {currentPosts?.map((post) => (
         <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
           <Post post={post} setCurrentId={setCurrentId}></Post>
         </Grid>
