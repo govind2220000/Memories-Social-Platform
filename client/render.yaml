@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: frontend
+    env: node
+    region: oregon
+    buildCommand: npm install --force && npm run build
+    startCommand: npm start
