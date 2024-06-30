@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const url = "https://memories-social-platform.onrender.com/posts"; //"https://memories-social-platform.onrender.com/posts";
-const authUrl = "https://memories-social-platform.onrender.com/users"; //https://memories-social-platform.onrender.com/users";
+export const url = process.env.REACT_APP_POSTS_URL; //"https://memories-social-platform.onrender.com/posts";
+export const authUrl = process.env.REACT_APP_USERS_URL; //https://memories-social-platform.onrender.com/users";
 
 //For passing jwt token on every request
 axios.interceptors.request.use((req) => {
@@ -157,7 +157,7 @@ export const addComment = createAsyncThunk(
 export const signInUser = createAsyncThunk(
   "signInUser",
   async ({ formData, navigate, setUser }, { rejectWithValue }) => {
-    console.log(formData, navigate);
+    console.log(authUrl);
     try {
       //login the user
       //console.log(formData, navigate);

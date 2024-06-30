@@ -72,7 +72,7 @@ const Navbar = ({ setUser, user }) => {
               },
             }}
           >
-            Memories
+            MemoryMiles
           </Typography>
           <img
             src={memories}

@@ -111,7 +111,9 @@ const PostDetails = () => {
                     {name}
                   </Typography>
                   <Typography gutterBottom variant="subtitle2">
-                    {message}
+                    {message.length > 150
+                      ? `${message.substring(0, 150)}...`
+                      : message}
                   </Typography>
                   <Typography gutterBottom variant="subtitle1">
                     Likes: {likes.length}

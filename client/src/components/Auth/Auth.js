@@ -100,7 +100,7 @@ const Auth = ({ user, setUser }) => {
   }
 
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="sm">
       <Paper
         sx={{
           marginTop: theme.spacing(8),
@@ -196,17 +196,40 @@ const Auth = ({ user, setUser }) => {
               </div>
             )}
           </Grid>
-          <Grid container justify="flex-end">
-            <Grid item>
+          <Grid container spacing={1} justifyContent="space-evenly">
+            <Grid item xs={12} sm="auto">
               <Button
                 onClick={switchMode}
+                fullWidth
                 sx={{
                   margin: theme.spacing(3, 0, 2),
+                  fontSize: {
+                    xs: "0.75rem",
+                    md: "0.9rem",
+                  },
                 }}
               >
                 {isSignup
                   ? "Already have an account? Sign in"
                   : "Don't have an account? Sign Up"}
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm="auto">
+              <Button
+                onClick={() => navigate("/forgot-password")}
+                fullWidth
+                sx={{
+                  margin: {
+                    xs: theme.spacing(-3, 0, 2),
+                    sm: theme.spacing(3, 0, 2),
+                  },
+                  fontSize: {
+                    xs: "0.75rem",
+                    md: "0.9rem",
+                  },
+                }}
+              >
+                Forgot Password
               </Button>
             </Grid>
           </Grid>

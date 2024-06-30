@@ -7,6 +7,8 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Auth from "./components/Auth/Auth.js";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import PostDetails from "./components/PostDetails/PostDetails.jsx";
+import { ForgotPassword } from "./components/ForgotPassword.jsx";
+import ResetPassword from "./components/ResetPassword.jsx";
 
 const App = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
@@ -35,11 +37,7 @@ const App = () => {
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <BrowserRouter>
         <Container maxWidth="2000px" className="h1">
-          {user ? (
-            <Navbar setUser={setUser} user={user}></Navbar>
-          ) : (
-            <Navigate to="/auth"></Navigate>
-          )}
+          {user && <Navbar setUser={setUser} user={user} />}
           <Routes>
             {/* {console.log(user)} */}
             <Route path="/" element={<Navigate to="/posts"></Navigate>} />
@@ -67,6 +65,14 @@ const App = () => {
                   <Auth user={user} setUser={setUser} />
                 )
               }
+            />
+            <Route
+              path="/forgot-password"
+              element={<ForgotPassword></ForgotPassword>}
+            />
+            <Route
+              path="/resetPassword/:id/:token"
+              element={<ResetPassword></ResetPassword>}
             />
           </Routes>
         </Container>
