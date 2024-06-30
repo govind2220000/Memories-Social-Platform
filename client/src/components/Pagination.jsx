@@ -10,7 +10,7 @@ const Paginate = ({ page }) => {
   const { numberOfPage } = useSelector((state) => state?.app?.posts);
   //console.log(numberOfPage);
   useEffect(() => {
-    console.log(page);
+    //console.log(page);
     if (page) {
       dispatch(fetchPosts({ page }));
       window.scrollTo({ top: 0, behavior: "smooth" });

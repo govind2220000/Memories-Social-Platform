@@ -162,7 +162,7 @@ export const signInUser = createAsyncThunk(
       //login the user
       //console.log(formData, navigate);
       const { data } = await axios.post(`${authUrl}/signin`, formData);
-      console.log(data);
+      //console.log(data);
 
       localStorage.setItem("profile", JSON.stringify({ ...data }));
       setUser(JSON.parse(localStorage.getItem("profile")));

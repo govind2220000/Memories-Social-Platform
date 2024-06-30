@@ -178,7 +178,7 @@ export const postSlice = createSlice({
         //console.log(state, action.payload);
         const userDetails = action?.payload;
         state.user[0] = userDetails;
-        console.log(state.user[0]);
+        //console.log(state.user[0]);
         localStorage.setItem("profile", JSON.stringify({ ...userDetails }));
       })
       .addCase(signInUser.rejected, (state, action) => {
