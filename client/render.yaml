@@ -3,5 +3,5 @@ services:
     name: frontend
     env: node
     region: oregon
-    buildCommand: npm install --force && npm run build
+    buildCommand: npm install --legacy-peer-deps && npm run build
     startCommand: npm start
